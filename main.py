@@ -1,6 +1,8 @@
+import random
+
 import pygame
 from pygame.locals import *
-import random
+
 # import json
 
 WIDTH = 800
@@ -33,7 +35,6 @@ def main():
         pygame.display.flip()
 
 
-
 class Map:
     def __init__(self):
         self.nodes = list()
@@ -49,7 +50,7 @@ class Map:
         for node in self.nodes:
             # here we will draw all of the paths first
             for neighbor in node.neighbors:
-                pygame.draw.line(screen, 255, node.pos, neighbor.pos)
+                pygame.draw.line(screen, 0, node.pos, neighbor.pos)
         for node in self.nodes:
             pygame.draw.circle(screen, 255, (node.pos[0],node.pos[1]), 15)
     def isConnected(self):
@@ -84,6 +85,7 @@ class Node:
     def __init__(self, pos):
         self.neighbors = set()
         self.pos = pos
+        self.sections = list()
     def addNeighbor(self, neighbor):
         self.neighbors.add(neighbor)
         neighbor.neighbors.add(self)
