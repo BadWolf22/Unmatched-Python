@@ -1,0 +1,1 @@
+This folder will hold json files with data for each character (health, mvspeed)
