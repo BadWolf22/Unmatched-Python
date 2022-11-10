@@ -3,11 +3,13 @@ import random
 import pygame
 from pygame.locals import *
 
+from card import Deck
+
 # import json
 
-WIDTH = 800
-HEIGHT = 600
-MARGIN = 100
+WIDTH = 1920
+HEIGHT = 1080
+MARGIN = 800
 PADDING = 25
 COL_PART = 10
 ROW_PART = 5
@@ -21,6 +23,7 @@ def main():
     background.fill((51, 51, 51))
 
     map = Map()
+    Deck.displayDeck()
 
     while True:
         for event in pygame.event.get():
@@ -28,11 +31,14 @@ def main():
                 return
             if event.type == KEYDOWN:
                 if event.key == K_SPACE: map = Map()
+                if event.key == K_ESCAPE: return
         screen.blit(background, (0, 0))
         # pygame.draw.line(screen,(255,255,255),(0, 0),pygame.mouse.get_pos())
         map.display(screen)
         # pygame.draw.circle(screen,255,(random.randint(0,800),random.randint(0,600)),random.randint(5,15))
         pygame.display.flip()
+
+
 
 
 class Map:

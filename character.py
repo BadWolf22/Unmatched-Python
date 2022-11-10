@@ -14,17 +14,22 @@ class Character:
         self.name = name
         self.specialAbility = specialAbility
         self.deck = Deck()
+        self.hasScheme = False
 
     def loseHealth(self, damageTaken):
         self.health -= damageTaken
     def gainHealth(self, lifeGained):
         self.health += lifeGained
 
+
+    #Taking turns
     def takeTurn(self):
         turns = 2
         while (turns > 0):
             # TODO: Options are movement (boostable), scheme, or attack (if player in range)
             # Actions may be cancelled before fully performed (before revealed)
+            
+
             turns -= 1
 
     def boostMovement(self, boostValue):
