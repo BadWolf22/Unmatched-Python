@@ -1,9 +1,6 @@
 import random
 import pygame
 
-# activate the pygame library 
-pygame.init()
-
 # card dimensions
 CARD_X = 411
 CARD_Y = 561
@@ -40,34 +37,22 @@ class Deck:
         # Here be play steps
         self.discard(card)
 
-    def displayDeck():
-        # create the display surface object
-        # of specific dimension..e(X, Y).
-        scrn = pygame.display.set_mode((CARD_X, CARD_Y))
+    def getDeckImage():
+        
+        # Create text
+        textColor = (255, 255, 255)
+        textFont = pygame.font.SysFont('Corbel',45, True)
+        text = textFont.render('Deck' , True , textColor)
 
-        # set the pygame window name
-        pygame.display.set_caption('image')
-        
         # change later so displays the character's cardback
-        imp = pygame.image.load("characters\paganini.jpg").convert()
+        deckImage = pygame.image.load("characters\paganini.jpg").convert()
+
+        #Decrease size of image
+        deckImage = pygame.transform.scale(deckImage, (411/2.5, 561/2.5))
+
+
         
-        # Using blit to copy content from one surface to other
-        scrn.blit(imp, (500, 500))
-        
-        # paint screen one time
-        pygame.display.flip()
-        status = True
-        while (status):
-        
-            # iterate over the list of Event objects
-            # that was returned by pygame.event.get() method.
-            for i in pygame.event.get():
-        
-                # if event object type is QUIT
-                # then quitting the pygame
-                # and program both.
-                if i.type == pygame.QUIT:
-                    status = False
+        return [deckImage, text]
         
 
 class Card:
