@@ -1,15 +1,31 @@
 import random
+# import json
 
 import pygame
 from pygame.locals import *
 
-from card import Deck
+######################################
+# Socket setup
+import socketio
+sio = socketio.Client()
 
-# import json
+@sio.event
+def connect():
+    print('connection established')
 
-WIDTH = 1920
-HEIGHT = 1080
-MARGIN = 800
+@sio.event
+def disconnect():
+    print('disconnected from server')
+
+@sio.on("message")
+def my_message(sid, data):
+    print(sid, "says:", data)
+######################################
+
+
+WIDTH = 800
+HEIGHT = 600
+MARGIN = 100
 PADDING = 25
 COL_PART = 10
 ROW_PART = 5
@@ -23,7 +39,6 @@ def main():
     background.fill((51, 51, 51))
 
     map = Map()
-    drawDeck = Deck.getDeckImage()
 
     while True:
         for event in pygame.event.get():
@@ -32,16 +47,12 @@ def main():
             if event.type == KEYDOWN:
                 if event.key == K_SPACE: map = Map()
                 if event.key == K_ESCAPE: return
+                if event.key == K_m: sio.emit("message", "hiii")
         screen.blit(background, (0, 0))
-        screen.blit(drawDeck[0], (1550, 730))
-        screen.blit(drawDeck[1], (1590, 820))
-
         # pygame.draw.line(screen,(255,255,255),(0, 0),pygame.mouse.get_pos())
         map.display(screen)
         # pygame.draw.circle(screen,255,(random.randint(0,800),random.randint(0,600)),random.randint(5,15))
         pygame.display.flip()
-
-
 
 
 class Map:
@@ -99,5 +110,9 @@ class Node:
         self.neighbors.add(neighbor)
         neighbor.neighbors.add(self)
 
+
+# First connect to the server, begin the game client, then disconnect when the client is stopped
 if __name__ == "__main__":
+    sio.connect('http://localhost:5000')
     main()
+    sio.disconnect()
