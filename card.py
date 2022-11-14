@@ -1,10 +1,16 @@
 import random
+import pygame
+
+# card dimensions
+CARD_X = 411
+CARD_Y = 561
 
 class CardType:
     defense = 0
     attack = 1
     versatile = 2
     special = 3
+    scheme = 4
 
 class Deck:
     def __init__(self):
@@ -30,6 +36,24 @@ class Deck:
     def play(self, card):
         # Here be play steps
         self.discard(card)
+
+    def getDeckImage():
+        
+        # Create text
+        textColor = (255, 255, 255)
+        textFont = pygame.font.SysFont('Corbel',45, True)
+        text = textFont.render('Deck' , True , textColor)
+
+        # change later so displays the character's cardback
+        deckImage = pygame.image.load("characters\paganini.jpg").convert()
+
+        #Decrease size of image
+        deckImage = pygame.transform.scale(deckImage, (411/2.5, 561/2.5))
+
+
+        
+        return [deckImage, text]
+        
 
 class Card:
     def __init__(self, name="", desc="", value=0, pic="", boost=0, copies=0, type=CardType.versatile, boostable=False):
