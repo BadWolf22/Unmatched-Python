@@ -8,3 +8,6 @@ It looks like Python 3.11 is too new, and so PIP has not been updated with the l
 ```
 pip install {path-to-whl-file}/pygame-2.0.1-cp310-cp310-win_amd64.whl
 ```
+
+## Python-Socketio
+For client communication, we will be using the [Python-Socketio](https://python-socketio.readthedocs.io/en/latest/index.html) library.
