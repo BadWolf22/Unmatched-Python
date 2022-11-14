@@ -1,8 +1,11 @@
 import random
-# import json
 
 import pygame
 from pygame.locals import *
+
+from card import Deck
+
+# import json
 
 ######################################
 # Socket setup
@@ -11,7 +14,7 @@ sio = socketio.Client()
 
 @sio.event
 def connect():
-    print('connection established')
+    print('connection established', f"sid=`{sio.get_sid()}`")
 
 @sio.event
 def disconnect():
@@ -22,10 +25,9 @@ def my_message(sid, data):
     print(sid, "says:", data)
 ######################################
 
-
-WIDTH = 800
-HEIGHT = 600
-MARGIN = 100
+WIDTH = 1920
+HEIGHT = 1080
+MARGIN = 800
 PADDING = 25
 COL_PART = 10
 ROW_PART = 5
@@ -33,12 +35,13 @@ ROW_PART = 5
 def main():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Test")
+    pygame.display.set_caption(sio.get_sid())
     background = pygame.Surface(screen.get_size())
     background = background.convert()
     background.fill((51, 51, 51))
 
     map = Map()
+    drawDeck = Deck.getDeckImage()
 
     while True:
         for event in pygame.event.get():
@@ -49,10 +52,15 @@ def main():
                 if event.key == K_ESCAPE: return
                 if event.key == K_m: sio.emit("message", "hiii")
         screen.blit(background, (0, 0))
+        screen.blit(drawDeck[0], (1550, 730))
+        screen.blit(drawDeck[1], (1590, 820))
+
         # pygame.draw.line(screen,(255,255,255),(0, 0),pygame.mouse.get_pos())
         map.display(screen)
         # pygame.draw.circle(screen,255,(random.randint(0,800),random.randint(0,600)),random.randint(5,15))
         pygame.display.flip()
+
+
 
 
 class Map:
@@ -109,7 +117,6 @@ class Node:
     def addNeighbor(self, neighbor):
         self.neighbors.add(neighbor)
         neighbor.neighbors.add(self)
-
 
 # First connect to the server, begin the game client, then disconnect when the client is stopped
 if __name__ == "__main__":
