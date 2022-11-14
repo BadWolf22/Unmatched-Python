@@ -14,7 +14,7 @@ sio = socketio.Client()
 
 @sio.event
 def connect():
-    print('connection established')
+    print('connection established', f"sid=`{sio.get_sid()}`")
 
 @sio.event
 def disconnect():
@@ -35,7 +35,7 @@ ROW_PART = 5
 def main():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Test")
+    pygame.display.set_caption(sio.get_sid())
     background = pygame.Surface(screen.get_size())
     background = background.convert()
     background.fill((51, 51, 51))
