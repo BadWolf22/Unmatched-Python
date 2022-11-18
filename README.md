@@ -5,7 +5,7 @@ Built by Joel and Matthew for CS501.
 # Contributing
 Current required package installation.
 ```shell
-pip install pygame python-socketio eventlet
+pip install -r requirements.txt
 ```
 Run a client instance with: `python client.py`.  
 Run a server instance with: `python server.py`.  
