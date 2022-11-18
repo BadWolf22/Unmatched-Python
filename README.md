@@ -9,7 +9,7 @@ pip install pygame python-socketio eventlet
 ```
 Run a client instance with: `python client.py`.  
 Run a server instance with: `python server.py`.  
-Run a debug instance (1 server and 2 clients) with: `f5 key` or `python main.py`.  
+Run a debug instance (1 server and 2 clients) with: `python main.py`.  
 
 
 ## PyGame not updated in Pip
