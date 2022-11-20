@@ -1,9 +1,10 @@
 import random
 import pygame
+import pygame_gui
 
 # card dimensions
-CARD_X = 411
-CARD_Y = 561
+CARD_X = 160
+CARD_Y = 220
 
 class CardType:
     defense = 0
@@ -37,22 +38,39 @@ class Deck:
         # Here be play steps
         self.discard(card)
 
-    def getDeckImage():
+    def getDeckImage(manager):
         
+        # create card image dimensions and margins
+        card_rect = pygame.Rect((0, 0), (CARD_X, CARD_Y))
+        card_rect.bottomright = (-250, -150)
+
+        # backside of card (Change later to put in character's cardback image)
+        cardBack = pygame.image.load("characters/paganini.jpg").convert()
+
+        # create the image ui object
+        drawDeckImage = pygame_gui.elements.UIImage(relative_rect=card_rect,
+                                                    image_surface=cardBack,
+                                                    manager=manager,
+                                                    anchors={'right': 'right',
+                                                            'bottom': 'bottom'})
+        return drawDeckImage
+
+    def getDeckText(manager):
+
         # Create text
-        textColor = (255, 255, 255)
-        textFont = pygame.font.SysFont('Corbel',45, True)
-        text = textFont.render('Deck' , True , textColor)
+        #textColor = (255, 255, 255)
+        #textFont = pygame.font.SysFont('Corbel',45, True)
+        #text = textFont.render('Deck' , True , textColor)
+        text_rect = pygame.Rect((0, 0), (200, 100))
+        text_rect.bottomright = (-230, -220)
 
-        # change later so displays the character's cardback
-        deckImage = pygame.image.load("characters\paganini.jpg").convert()
+        drawDeckText = pygame_gui.elements.UILabel(relative_rect=text_rect,
+                                                   text="Deck",  
+                                                   manager=manager,
+                                                   anchors={'right': 'right',
+                                                            'bottom': 'bottom'})
+        return drawDeckText
 
-        #Decrease size of image
-        deckImage = pygame.transform.scale(deckImage, (411/2.5, 561/2.5))
-
-
-        
-        return [deckImage, text]
         
 
 class Card:
