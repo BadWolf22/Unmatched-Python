@@ -11,6 +11,10 @@ class CardType:
     versatile = 2
     special = 3
     scheme = 4
+class Usabilities:
+    any = 0
+    main = 1
+    sidekick = 2
 
 class Deck:
     def __init__(self):
@@ -56,7 +60,7 @@ class Deck:
         
 
 class Card:
-    def __init__(self, name="", desc="", value=0, pic="", boost=0, copies=0, type=CardType.versatile, boostable=False):
+    def __init__(self, name="", desc="", value=0, pic="", boost=0, copies=0, type=CardType.versatile, boostable=False, usableBy=Usabilities.any):
         self.name = name
         self.picture = pic
         self.boostValue = boost
@@ -65,3 +69,4 @@ class Card:
         self.value = value
         self.type = type
         self.boostable = boostable
+        self.usableBy = usableBy
