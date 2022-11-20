@@ -1,4 +1,8 @@
 import random
+import sys
+import json
+from os import environ
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame
 from pygame.locals import *
@@ -23,6 +27,13 @@ def disconnect():
 @sio.on("message")
 def my_message(sid, data):
     print(sid, "says:", data)
+    
+@sio.on("roomlist")
+def roomlist(data):
+    print(data)
+    roomName = input("Room Name: ")
+    public = input("Display in room list? y/n: ") in ["y", "yes"]
+    sio.emit("joinroom", (roomName, public))
 ######################################
 
 WIDTH = 1920
@@ -120,6 +131,9 @@ class Node:
 
 # First connect to the server, begin the game client, then disconnect when the client is stopped
 if __name__ == "__main__":
-    sio.connect('http://localhost:5000')
+    address = 'http://localhost:5000'
+    if len(sys.argv) > 1 and sys.argv[1] in ["m", "manual", "-m"]:
+        address = input("Please input the server address: ")
+    sio.connect(address)
     main()
     sio.disconnect()
