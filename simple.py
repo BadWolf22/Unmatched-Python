@@ -4,6 +4,7 @@ environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 import pygame
 import pygame_menu
+from character import Character
 
 RESOLUTIONS = [(600, 600), (800, 800), (1000, 1000), (1280, 720), (1920, 1080)]
 RESOLUTION_INDEX = 0
@@ -84,9 +85,13 @@ def connect_to_room(*args):
     make_charMenu()
     pass
 
+players = dict()
+
 def select_character(*args):
+    global players
     sio.emit("charSelect", args[0])
     print(args[0])
+    players["player"] = Character.assignCharacter('characters/phineasFerb.json')
     charMenu.toggle()
     make_gameMenu()
     pass
@@ -143,7 +148,7 @@ def make_cardArea(color, prefix):
         height=int(surface.get_height() / 5),
         width=surface.get_width(),
     ).set_margin(0, 0)
-    area_draw = gameMenu.add.button("Draw: 30", button_id=prefix+"Draw").set_selection_effect(None)
+    area_draw = gameMenu.add.button("Draw: " + "30", button_id=prefix+"Draw").set_selection_effect(None)
     area_hand = gameMenu.add.frame_h(
         frame_id=prefix+"Hand",
         background_color="#0000aa",
@@ -152,7 +157,7 @@ def make_cardArea(color, prefix):
         padding=0,
         max_width=surface.get_width()-400
     )
-    area_disc = gameMenu.add.button("Discard: 00", button_id=prefix+"Disc").set_selection_effect(None)
+    area_disc = gameMenu.add.button("Discard: " + "00", button_id=prefix+"Disc").set_selection_effect(None)
     card_area.pack(
         area_draw,
         align=pygame_menu.locals.ALIGN_LEFT,
