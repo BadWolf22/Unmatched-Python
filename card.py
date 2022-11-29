@@ -1,24 +1,15 @@
 import random
 import pygame
 import pygame_gui
+import json
 
 # card dimensions
 CARD_X = 160
 CARD_Y = 220
 
-class CardType:
-    defense = 0
-    attack = 1
-    versatile = 2
-    special = 3
-    scheme = 4
-class Usabilities:
-    any = 0
-    main = 1
-    sidekick = 2
-
 class Deck:
-    def __init__(self):
+    def __init__(self, size= 30):
+        self.deckSize = size
         self.drawPile = list()
         self.discardPile = list()
         self.hand = list()
@@ -41,6 +32,28 @@ class Deck:
     def play(self, card):
         # Here be play steps
         self.discard(card)
+
+    def assignDeck(jsonFile):
+
+        newDeck = Deck(30)
+
+        cardCount = 0
+        cardIndex = 0
+        while cardCount < newDeck.deckSize:
+            newCard = Card.assignCard(jsonFile, cardIndex)
+
+            copiesCount = 0
+            while copiesCount < newCard.copies:
+                newDeck.addCard(newCard)
+                copiesCount += 1
+                cardCount += 1
+            
+            cardIndex += 1
+
+        print(len(newDeck.drawPile))
+
+            
+
 
     def getDeckImage(manager):
         
@@ -78,13 +91,36 @@ class Deck:
         
 
 class Card:
-    def __init__(self, name="", desc="", value=0, pic="", boost=0, copies=0, type=CardType.versatile, boostable=False, usableBy=Usabilities.any):
+    def __init__(self, name="", basicText="", immediateText="", duringText="", afterText="", value=0, pic="", boost=0, copies=0, type="", usableBy=""):
         self.name = name
         self.picture = pic
         self.boostValue = boost
-        self.description = desc
+        self.basicText = basicText
+        self.immediateText = immediateText
+        self.duringText = duringText
+        self.afterText = afterText
         self.copies = copies
         self.value = value
         self.type = type
-        self.boostable = boostable
         self.usableBy = usableBy
+
+    def assignCard(jsonFile, cardIndex):
+        with open(jsonFile) as json_file:
+            cardData = json.load(json_file)
+        
+        newCard = Card(
+            name= cardData['cards'][cardIndex]['title'],
+            copies= cardData['cards'][cardIndex]['quantity'],
+            type= cardData['cards'][cardIndex]['type'],
+            pic= cardData['cards'][cardIndex]['imageUrl'],
+            boost= cardData['cards'][cardIndex]['boost'],
+            basicText= cardData['cards'][cardIndex]['basicText'],
+            immediateText= cardData['cards'][cardIndex]['immediateText'],
+            duringText= cardData['cards'][cardIndex]['duringText'],
+            afterText= cardData['cards'][cardIndex]['afterText'],
+            value= cardData['cards'][cardIndex]['value'],
+            usableBy= cardData['cards'][cardIndex]['characterName']
+        )
+        print(newCard.name)
+
+        return newCard

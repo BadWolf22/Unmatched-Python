@@ -6,6 +6,7 @@ from pygame.locals import *
 import pygame_gui
 
 from card import Deck
+from character import Character
 
 ######################################
 # Socket setup
@@ -38,6 +39,8 @@ def main():
 
     map = Map()
 
+    Character.assignCharacter('characters/phineasFerb.json')
+    Deck.assignDeck('characters/phineasFerb.json')
 
     # draw the deck
     drawDeckImage = Deck.getDeckImage(manager)
