@@ -16,6 +16,9 @@ class Deck:
     def addCard(self, card):
         self.drawPile.append(card)
     def draw(self):
+        # IMPORTANT
+        # When drawing, physical cards should be added to either the "playerHand" or "enemyHand" widget.
+        # Get the widget using https://pygame-menu.readthedocs.io/en/4.2.8/_source/create_menu.html?highlight=get%20widget#pygame_menu.menu.Menu.get_widget
         if len(self.drawPile == 0):
             return -1
         chosen = random.choice(self.drawPile)
