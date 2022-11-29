@@ -15,7 +15,7 @@ class Character:
         self.attackType = attackType
         self.name = name
         self.specialAbility = specialAbility
-        self.deck = Deck()
+        self.deck = None
         self.hasScheme = False
 
     def loseHealth(self, damageTaken):
@@ -34,6 +34,8 @@ class Character:
             name= characterData['hero']['name'],
             specialAbility= characterData['hero']['specialAbility']
         )
+        newCharacter.deck = Deck.assignDeck('characters/phineasFerb.json')
+        
         print(newCharacter.name)
         print(newCharacter.health)
         print(newCharacter.moveDistance)
