@@ -51,6 +51,7 @@ class Deck:
             cardIndex += 1
 
         print(len(newDeck.drawPile))
+        return newDeck
 
             
 
