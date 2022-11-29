@@ -1,12 +1,14 @@
 import random
+import json
 from card import Deck
 
 class AttackRange:
-    melee = 0
-    ranged = 1
+    isRanged = True
+
+
 
 class Character:
-    def __init__(self, maxHealth = 0, moveDistance = 2, attackType = AttackRange.melee, name = "", specialAbility = ""):
+    def __init__(self, maxHealth = 0, moveDistance = 2, attackType = AttackRange.isRanged, name = "", specialAbility = ""):
         self.health = maxHealth
         self.maxHealth = maxHealth
         self.moveDistance = moveDistance
@@ -20,6 +22,26 @@ class Character:
         self.health -= damageTaken
     def gainHealth(self, lifeGained):
         self.health += lifeGained
+
+    def assignCharacter(jsonFile):
+        with open(jsonFile) as json_file:
+            characterData = json.load(json_file)
+
+        newCharacter = Character(
+            maxHealth= characterData['hero']['hp'],
+            moveDistance= characterData['hero']['move'],
+            attackType= characterData['hero']['isRanged'],
+            name= characterData['hero']['name'],
+            specialAbility= characterData['hero']['specialAbility']
+        )
+        print(newCharacter.name)
+        print(newCharacter.health)
+        print(newCharacter.moveDistance)
+        print(newCharacter.attackType)
+        print(newCharacter.specialAbility)
+
+        return newCharacter
+
 
 
     #Taking turns
