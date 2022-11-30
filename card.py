@@ -1,11 +1,7 @@
 import random
 import pygame
-import pygame_gui
+import pygame_menu
 import json
-
-# card dimensions
-CARD_X = 160
-CARD_Y = 220
 
 class Deck:
     def __init__(self, size= 30):
@@ -15,16 +11,25 @@ class Deck:
         self.hand = list()
     def addCard(self, card):
         self.drawPile.append(card)
-    def draw(self):
+    def draw(self, gameMenu, area_hand, prefix):
         # IMPORTANT
         # When drawing, physical cards should be added to either the "playerHand" or "enemyHand" widget.
         # Get the widget using https://pygame-menu.readthedocs.io/en/4.2.8/_source/create_menu.html?highlight=get%20widget#pygame_menu.menu.Menu.get_widget
-        if len(self.drawPile == 0):
+        if len(self.drawPile) == 0:
             return -1
         chosen = random.choice(self.drawPile)
         self.drawPile.remove(chosen)
         self.hand.append(chosen)
+
+        area_card = gameMenu.add.button(f"{chosen.type}:{chosen.value}",button_id=f"{prefix}Card{len(self.hand)}")
+
+        area_hand.pack(
+        area_card,
+        align=pygame_menu.locals.ALIGN_LEFT,
+        vertical_position=pygame_menu.locals.POSITION_CENTER,
+    )
         return chosen
+
     def discard(self, card=None):
         if not card:
             if len(self.hand) == 0:
@@ -55,42 +60,6 @@ class Deck:
 
         print(len(newDeck.drawPile))
         return newDeck
-
-            
-
-
-    def getDeckImage(manager):
-        
-        # create card image dimensions and margins
-        card_rect = pygame.Rect((0, 0), (CARD_X, CARD_Y))
-        card_rect.bottomright = (-250, -150)
-
-        # backside of card (Change later to put in character's cardback image)
-        cardBack = pygame.image.load("characters/paganini.jpg").convert()
-
-        # create the image ui object
-        drawDeckImage = pygame_gui.elements.UIImage(relative_rect=card_rect,
-                                                    image_surface=cardBack,
-                                                    manager=manager,
-                                                    anchors={'right': 'right',
-                                                            'bottom': 'bottom'})
-        return drawDeckImage
-
-    def getDeckText(manager):
-
-        # Create text
-        #textColor = (255, 255, 255)
-        #textFont = pygame.font.SysFont('Corbel',45, True)
-        #text = textFont.render('Deck' , True , textColor)
-        text_rect = pygame.Rect((0, 0), (200, 100))
-        text_rect.bottomright = (-230, -220)
-
-        drawDeckText = pygame_gui.elements.UILabel(relative_rect=text_rect,
-                                                   text="Deck",  
-                                                   manager=manager,
-                                                   anchors={'right': 'right',
-                                                            'bottom': 'bottom'})
-        return drawDeckText
 
         
 

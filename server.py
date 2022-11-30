@@ -1,6 +1,17 @@
 import eventlet
 import socketio
 import json
+#import gameManager
+
+
+#player1Connected=False
+#player2Connected=False
+#gameStarted=False
+
+#if player1Connected==True and player2Connected==True and gameStarted==False:
+    #gameStarted=True
+    #gameManager.startGame()
+
 
 DEBUG = True
 
@@ -20,6 +31,10 @@ def connect(sid, environ):
 def disconnect(sid):
     if DEBUG: print('disconnect ', sid)
     del clients[sid]
+
+@sio.on("char")
+def my_char(sid, data):
+    sio.emit("char", data, room=clients[sid]["room"], skip_sid=sid)
 
 
 @sio.on("message")

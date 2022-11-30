@@ -12,6 +12,7 @@ RESOLUTION_INDEX = 0
 pygame.init()
 surface = pygame.display.set_mode(RESOLUTIONS[RESOLUTION_INDEX])
 
+
 # Create a custom theme
 my_theme = pygame_menu.themes.THEME_DARK.copy()
 my_theme.title = False  # Hide the menu title
@@ -68,6 +69,11 @@ def disconnect():
 @sio.on("message")
 def my_message(sid, data):
     print(sid, "says:", data)
+
+@sio.on("char")
+def my_char(character):
+    players[character] = Character.assignCharacter('characters/phineasFerb.json')
+    print(character)
 ######################################
 
 
@@ -89,9 +95,7 @@ players = dict()
 
 def select_character(*args):
     global players
-    sio.emit("charSelect", args[0])
-    print(args[0])
-    players["player"] = Character.assignCharacter('characters/phineasFerb.json')
+    sio.emit("char", args[0])
     charMenu.toggle()
     make_gameMenu()
     pass
@@ -148,16 +152,26 @@ def make_cardArea(color, prefix):
         height=int(surface.get_height() / 5),
         width=surface.get_width(),
     ).set_margin(0, 0)
-    area_draw = gameMenu.add.button("Draw: " + "30", button_id=prefix+"Draw").set_selection_effect(None)
+    area_draw = gameMenu.add.button("Draw: 30", button_id=prefix+"Draw").set_selection_effect(None)
     area_hand = gameMenu.add.frame_h(
         frame_id=prefix+"Hand",
         background_color="#0000aa",
         height=card_area.get_height()-40,
-        width=surface.get_width(),
+        width=surface.get_width()+1000,
         padding=0,
         max_width=surface.get_width()-400
     )
+
     area_disc = gameMenu.add.button("Discard: " + "00", button_id=prefix+"Disc").set_selection_effect(None)
+
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+    # players[prefix].deck.draw(gameMenu, area_hand, prefix)
+
     card_area.pack(
         area_draw,
         align=pygame_menu.locals.ALIGN_LEFT,
@@ -173,12 +187,14 @@ def make_cardArea(color, prefix):
         align=pygame_menu.locals.ALIGN_RIGHT,
         vertical_position=pygame_menu.locals.POSITION_CENTER,
     )
+
     return card_area
 
 # temp = gameMenu.add.image(
 #     image_path="characters\paganini.jpg"
 # )
 # temp.resize(temp.get_width()/temp.get_height()*100, 100)
+
 
 make_mainMenu()
 # make_gameMenu()
