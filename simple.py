@@ -5,6 +5,7 @@ environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame
 import pygame_menu
 from character import Character
+from map import Map
 
 RESOLUTIONS = [(600, 600), (800, 800), (1000, 1000), (1280, 720), (1920, 1080)]
 RESOLUTION_INDEX = 0
@@ -134,10 +135,11 @@ def make_gameMenu():
     enemy_info = make_cardArea("#ff0000", "enemy")
     your_info = make_cardArea("#00aa00", "player")
     your_info.translate(0, surface.get_height() - your_info.get_height())
-    
-    gameMenu.add.button(
-        "test", send_message, float=True, align=pygame_menu.locals.ALIGN_LEFT
-    ).translate(300, 300)
+    map_area = make_mapArea(enemy_info.get_height()+your_info.get_height())
+
+    # gameMenu.add.button(
+    #     "test", send_message, float=True, align=pygame_menu.locals.ALIGN_LEFT
+    # ).translate(300, 300)
 
     gameMenu.mainloop(surface)
 
@@ -174,6 +176,17 @@ def make_cardArea(color, prefix):
         vertical_position=pygame_menu.locals.POSITION_CENTER,
     )
     return card_area
+
+def make_mapArea(minusHeight):
+    mapArea = gameMenu.add.frame_h(
+        float=True,
+        frame_id="map",
+        height=surface.get_height()-minusHeight,
+        width=surface.get_width(),
+        padding=0,
+    ).set_margin(0, 0).translate(0, minusHeight/2)
+    my_map = Map("maps/default.json", gameMenu, mapArea)
+    return mapArea, my_map
 
 # temp = gameMenu.add.image(
 #     image_path="characters\paganini.jpg"
