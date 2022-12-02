@@ -4,7 +4,6 @@ import pygame_menu
 
 cols = ["red", "orange", "yellow", "green", "blue", "purple", "brown", "black"];
 
-
 class Map:
     def __init__(self, file, menu, widget):
         file = open(file)
@@ -67,24 +66,3 @@ class Map:
             #             prev=False
             #         )
             #         # print(init_angle, final_angle)
-
-
-# pygame.init()
-# surface = pygame.display.set_mode((800, 480))
-
-# # Create a custom theme
-# my_theme = pygame_menu.themes.THEME_DARK.copy()
-# my_theme.title = False  # Hide the menu title
-
-# gameMenu = pygame_menu.Menu(
-#     title="",
-#     width=surface.get_width(),
-#     height=surface.get_height(),
-#     theme=my_theme,
-#     mouse_motion_selection=True,
-#     center_content=False,
-# )
-
-# my_map = Map("maps/default.json", gameMenu)
-
-# gameMenu.mainloop(surface)
