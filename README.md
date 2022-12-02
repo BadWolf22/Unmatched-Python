@@ -20,3 +20,7 @@ pip install ./pygame-2.1.2-cp311-cp311-win_amd64.whl
 
 ## Python-Socketio
 For client communication, we will be using the [Python-Socketio](https://python-socketio.readthedocs.io/en/latest/index.html) library.
+
+## Map Building Tool
+I made a tool for making and exporting maps using a JavaScript library called p5.js.  
+It can be used/edited [here](https://editor.p5js.org/BadWolf22/sketches/S9VkhkAay).
