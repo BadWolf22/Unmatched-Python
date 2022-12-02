@@ -3,15 +3,18 @@ import pygame
 import pygame_menu
 import json
 
+
 class Deck:
-    def __init__(self, size= 30):
+    def __init__(self, size=30):
         self.deckSize = size
         self.drawPile = list()
         self.discardPile = list()
         self.hand = list()
+
     def addCard(self, card):
         self.drawPile.append(card)
-    def draw(self, gameMenu, area_hand, prefix):
+
+    def draw(self, gameMenu, area_draw, area_hand, prefix):
         # IMPORTANT
         # When drawing, physical cards should be added to either the "playerHand" or "enemyHand" widget.
         # Get the widget using https://pygame-menu.readthedocs.io/en/4.2.8/_source/create_menu.html?highlight=get%20widget#pygame_menu.menu.Menu.get_widget
@@ -21,13 +24,15 @@ class Deck:
         self.drawPile.remove(chosen)
         self.hand.append(chosen)
 
-        area_card = gameMenu.add.button(f"{chosen.type}:{chosen.value}",button_id=f"{prefix}Card{len(self.hand)}")
-
+        area_card = gameMenu.add.button(
+            f"{chosen.type}:{chosen.value}", button_id=f"{prefix}Card{len(self.hand)}"
+        ).update_font({"size": 15})
         area_hand.pack(
-        area_card,
-        align=pygame_menu.locals.ALIGN_LEFT,
-        vertical_position=pygame_menu.locals.POSITION_CENTER,
-    )
+            area_card,
+            align=pygame_menu.locals.ALIGN_LEFT,
+            vertical_position=pygame_menu.locals.POSITION_CENTER,
+        )
+        area_draw.set_title(f"Draw: {len(self.drawPile)}")
         return chosen
 
     def discard(self, card=None):
@@ -37,6 +42,7 @@ class Deck:
             card = random.choice(self.hand)
         self.hand.remove(card)
         self.discardPile.append(card)
+
     def play(self, card):
         # Here be play steps
         self.discard(card)
@@ -55,16 +61,28 @@ class Deck:
                 newDeck.addCard(newCard)
                 copiesCount += 1
                 cardCount += 1
-            
+
             cardIndex += 1
 
         print(len(newDeck.drawPile))
         return newDeck
 
-        
 
 class Card:
-    def __init__(self, name="", basicText="", immediateText="", duringText="", afterText="", value=0, pic="", boost=0, copies=0, type="", usableBy=""):
+    def __init__(
+        self,
+        name="",
+        basicText="",
+        immediateText="",
+        duringText="",
+        afterText="",
+        value=0,
+        pic="",
+        boost=0,
+        copies=0,
+        type="",
+        usableBy="",
+    ):
         self.name = name
         self.picture = pic
         self.boostValue = boost
@@ -80,19 +98,19 @@ class Card:
     def assignCard(jsonFile, cardIndex):
         with open(jsonFile) as json_file:
             cardData = json.load(json_file)
-        
+
         newCard = Card(
-            name= cardData['cards'][cardIndex]['title'],
-            copies= cardData['cards'][cardIndex]['quantity'],
-            type= cardData['cards'][cardIndex]['type'],
-            pic= cardData['cards'][cardIndex]['imageUrl'],
-            boost= cardData['cards'][cardIndex]['boost'],
-            basicText= cardData['cards'][cardIndex]['basicText'],
-            immediateText= cardData['cards'][cardIndex]['immediateText'],
-            duringText= cardData['cards'][cardIndex]['duringText'],
-            afterText= cardData['cards'][cardIndex]['afterText'],
-            value= cardData['cards'][cardIndex]['value'],
-            usableBy= cardData['cards'][cardIndex]['characterName']
+            name=cardData["cards"][cardIndex]["title"],
+            copies=cardData["cards"][cardIndex]["quantity"],
+            type=cardData["cards"][cardIndex]["type"],
+            pic=cardData["cards"][cardIndex]["imageUrl"],
+            boost=cardData["cards"][cardIndex]["boost"],
+            basicText=cardData["cards"][cardIndex]["basicText"],
+            immediateText=cardData["cards"][cardIndex]["immediateText"],
+            duringText=cardData["cards"][cardIndex]["duringText"],
+            afterText=cardData["cards"][cardIndex]["afterText"],
+            value=cardData["cards"][cardIndex]["value"],
+            usableBy=cardData["cards"][cardIndex]["characterName"],
         )
         print(newCard.name)
 
