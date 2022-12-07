@@ -17,6 +17,7 @@ class Character:
         self.specialAbility = specialAbility
         self.deck = None
         self.hasScheme = False
+        self.mapNode = None
 
     def loseHealth(self, damageTaken):
         self.health -= damageTaken
@@ -36,11 +37,11 @@ class Character:
         )
         newCharacter.deck = Deck.assignDeck('characters/phineasFerb.json')
         
-        print(newCharacter.name)
-        print(newCharacter.health)
-        print(newCharacter.moveDistance)
-        print(newCharacter.attackType)
-        print(newCharacter.specialAbility)
+        # print(newCharacter.name)
+        # print(newCharacter.health)
+        # print(newCharacter.moveDistance)
+        # print(newCharacter.attackType)
+        # print(newCharacter.specialAbility)
 
         return newCharacter
 

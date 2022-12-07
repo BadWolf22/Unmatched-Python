@@ -5,13 +5,13 @@ import pygame_menu
 cols = ["red", "orange", "yellow", "green", "blue", "purple", "brown", "black"];
 
 class Map:
-    def __init__(self, file, menu, widget):
+    def __init__(self, file, menu, widget, onreturn):
         file = open(file)
         self.data = json.load(file)
-        self.display(menu, widget)
+        self.display(menu, widget, onreturn)
         return
 
-    def display(self, menu, widget):
+    def display(self, menu, widget, onreturn):
         decorator = widget.get_decorator()
         xOff = -widget.get_width()/2 + 10
         yOff = -widget.get_height()/2 + 25
@@ -36,7 +36,7 @@ class Map:
             pos = self.data[str(node)]["pos"]
             groups = self.data[str(node)]["group"]
             button = menu.add.button(
-                "", float=True, align=pygame_menu.locals.ALIGN_LEFT
+                "", onreturn, node, button_id=str(node), float=True, align=pygame_menu.locals.ALIGN_LEFT
             )
             widget.pack(button)
             button.translate(widget.get_width() * pos[0], widget.get_height() * pos[1])

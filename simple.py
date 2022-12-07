@@ -102,6 +102,17 @@ def room_full():
 def start_game():
     waitMenu.set_onupdate(make_charMenu)
 
+@sio.on("sevent_startTurn")
+def start_turn():
+    print("starting turn")
+    global numActions
+    numActions = 2
+
+@sio.on("sevent_move")
+def enemy_move(nodeNum):
+    players["enemy"].mapNode = nodeNum
+    print("Enemy moved to:", nodeNum)
+    display_chars()
 
 ######################################
 
@@ -130,6 +141,7 @@ def connect_to_room(*args):
 
 players = dict()
 numActions = 0
+attacking = False
 
 
 def select_character(*args):
@@ -147,8 +159,64 @@ def setup_hands():
             area_draw = gameMenu.get_widget(player + "Draw")
             area_hand = gameMenu.get_widget(player + "Hand")
             for i in range(5):
-                players[player].deck.draw(gameMenu, area_draw, area_hand, player)
+                card = players[player].deck.draw(gameMenu, area_draw, area_hand, player, card_press)
 
+# When you press on a map node button!
+def node_press(*args):
+    global numActions
+    global attacking
+    if numActions == 0:
+        return print("You have no turns right now!")
+    dist = dist_between(players["player"].mapNode, args[0])
+    print(dist, players["player"].moveDistance)
+    # TODO: Check for attacking
+    if dist > players["player"].moveDistance:
+        return print("This is too far to move!")
+    numActions -= 1
+    sio.emit("cevent_move", args[0])
+    players["player"].mapNode = args[0]
+    display_chars()
+    print("Moving to:", args[0])
+    if numActions == 0:
+        sio.emit("cevent_endTurn")
+
+def dist_between(n1, n2):
+    if n1 == None or n1 == n2: return 0
+    global my_map
+    q = [n1]
+    tempNodes = dict()
+    tempNodes[n1] = 0
+    while len(q) > 0:
+        curr = q.pop(0)
+        for neighbor in my_map.data[str(curr)]["neighbors"]:
+            if str(neighbor) not in tempNodes:
+                tempNodes[neighbor] = tempNodes[curr] + 1
+                if neighbor == n2: return tempNodes[neighbor]
+                q.append(neighbor)
+
+def display_chars():
+    global my_map
+    for node in range(my_map.data["nodeCount"]):
+        gameMenu.get_widget(str(node)).set_title("")
+    for player in players:
+        try:
+            gameMenu.get_widget(str(players[player].mapNode)).set_title(player[0])
+        except:
+            pass
+
+# When you press on a card button!
+def card_press(*args):
+    global numActions
+    global attacking
+    if numActions == 0:
+        return print("You have no turns right now!")
+    if not attacking:
+        return print("You may not play a card right now!")
+    numActions -= 1
+    # sio.emit("cevent_attack", args[1])
+    print(args[0][0]=="p", args[1].value)
+    if numActions == 0:
+        sio.emit("cevent_endTurn")
 
 def send_message():
     sio.emit("message", "hiii")
@@ -242,6 +310,7 @@ def make_cardArea(color, prefix):
 
     return card_area
 
+my_map = None
 
 def make_mapArea(minusHeight):
     mapArea = (
@@ -255,9 +324,9 @@ def make_mapArea(minusHeight):
         .set_margin(0, 0)
         .translate(0, minusHeight / 2)
     )
-    my_map = Map("maps/default.json", gameMenu, mapArea)
+    global my_map
+    my_map = Map("maps/default.json", gameMenu, mapArea, node_press)
     return mapArea, my_map
-
 
 # temp = gameMenu.add.image(
 #     image_path="characters\paganini.jpg"

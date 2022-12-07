@@ -3,18 +3,18 @@ import pygame
 import pygame_menu
 import json
 
-
 class Deck:
     def __init__(self, size=30):
         self.deckSize = size
         self.drawPile = list()
         self.discardPile = list()
         self.hand = list()
+        self.drawnCount = 0
 
     def addCard(self, card):
         self.drawPile.append(card)
 
-    def draw(self, gameMenu, area_draw, area_hand, prefix):
+    def draw(self, gameMenu, area_draw, area_hand, prefix, onreturn):
         # IMPORTANT
         # When drawing, physical cards should be added to either the "playerHand" or "enemyHand" widget.
         # Get the widget using https://pygame-menu.readthedocs.io/en/4.2.8/_source/create_menu.html?highlight=get%20widget#pygame_menu.menu.Menu.get_widget
@@ -23,9 +23,11 @@ class Deck:
         chosen = random.choice(self.drawPile)
         self.drawPile.remove(chosen)
         self.hand.append(chosen)
+        self.drawnCount += 1
 
+        card_id = f"{prefix}Card{self.drawnCount}"
         area_card = gameMenu.add.button(
-            f"{chosen.type}:{chosen.value}", button_id=f"{prefix}Card{len(self.hand)}"
+            f"{f'{chosen.type}:{chosen.value}' if prefix=='player' else 'Card'}", onreturn, card_id, chosen, button_id=card_id
         ).update_font({"size": 15})
         area_hand.pack(
             area_card,
@@ -64,7 +66,7 @@ class Deck:
 
             cardIndex += 1
 
-        print(len(newDeck.drawPile))
+        # print(len(newDeck.drawPile))
         return newDeck
 
 
@@ -81,7 +83,7 @@ class Card:
         boost=0,
         copies=0,
         type="",
-        usableBy="",
+        usableBy=""
     ):
         self.name = name
         self.picture = pic
@@ -112,6 +114,6 @@ class Card:
             value=cardData["cards"][cardIndex]["value"],
             usableBy=cardData["cards"][cardIndex]["characterName"],
         )
-        print(newCard.name)
+        # print(newCard.name)
 
         return newCard

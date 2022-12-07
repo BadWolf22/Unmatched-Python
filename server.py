@@ -57,7 +57,9 @@ def join_room(sid, name):
         clients[sid]["room"] = name
         sio.enter_room(sid, name)
         sio.emit("sevent_roomAccept", room=sid)
-        if (roomList[name] == 2): sio.emit("sevent_gameStart", room=name)
+        if (roomList[name] == 2):
+            sio.emit("sevent_gameStart", room=name)
+            cevent_endTurn(sid)
     else:
         sio.emit("sevent_roomFull", room=sid)
 
